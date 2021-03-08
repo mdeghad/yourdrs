@@ -1,19 +1,22 @@
+import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
-import 'package:flutter/widgets.dart';
 import 'package:YOURDRS_FlutterAPP/blocs/base/base_bloc_event.dart';
 
 abstract class PatientDetailsEvent extends BaseBlocEvent {}
+File file;
+class UploadImagesToServer extends PatientDetailsEvent{
 
-class UploadImages extends PatientDetailsEvent{
-  String filename;
+  String base64Image = base64Encode(file.readAsBytesSync());
+  String fileName = file.path.split("/").last;
 
   @override
   // TODO: implement props
   List<Object> get props => throw UnimplementedError();
 }
 
-class openGallerySelectImage extends PatientDetailsEvent{
+class saveImagesToserver extends PatientDetailsEvent{
+  String base64Image = base64Encode(file.readAsBytesSync());
+  String fileName = file.path.split("/").last;
   @override
   // TODO: implement props
   List<Object> get props => throw UnimplementedError();

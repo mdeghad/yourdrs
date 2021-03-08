@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:YOURDRS_FlutterAPP/common/app_colors.dart';
 import 'package:YOURDRS_FlutterAPP/common/app_log_helper.dart';
+import 'package:YOURDRS_FlutterAPP/common/app_strings.dart';
 import 'package:YOURDRS_FlutterAPP/data/model/image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -27,35 +28,23 @@ class UploadedImagesState extends State {
   FilePicker filePicker;
   String directory;
   List file = new List();
-  _getSDCardDirectory() async {
-    Directory directory = await getExternalStorageDirectory();
-    print(directory.path);
-    await directory.list().toList().then((filesList) => print(filesList));
-    print(directory.parent.path.characters);
-  }
+
+
   void _listofFiles() async {
-    directory = (await getApplicationDocumentsDirectory()).path;
+    directory = (await getExternalStorageDirectory()).path;
     setState(() {
-      file = Directory("$directory/YourDrsImages/").listSync();
-      print("files"+directory);//use your folder name insted of resume.
+      file = Directory("${directory}/${AppStrings.folderName}").listSync();
+      print("files path......."+file.toString());//use your folder name insted of resume.
     });
   }
+
+
   @override
   void initState() {
-    // _getSDCardDirectory();
-    // _listofFiles();
-  //  List items=FilePicker.getDirectoryPath() as List;
-   // print(items);
+    _listofFiles();
     super.initState();
 
   }
-
-  static Future<String> getDirectoryPath() async {
-
- //   Log.e("pathsdfsdf",FilePicker.getDirectoryPath());
-    return getDirectoryPath();
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +77,7 @@ class UploadedImagesState extends State {
                         child: const CircularProgressIndicator())
                     : ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: images.length,
+                        itemCount: file.length,
                         itemBuilder: (context,index) {
                           return GestureDetector(
                             child: Container(
@@ -96,12 +85,11 @@ class UploadedImagesState extends State {
                               height: 130,
                               width: 150,
                               color: CustomizedColors.homeSubtitleColor,
-                              child: Stack(
-                                children:[ Image.network(
-                                  '${images[index].image_name}',
+                              child:Image.file(
+                                 file[index],
                                   fit: BoxFit.contain,
                                 ),
-                             ] ),
+
                             ),
                             onTap: () {
                               setState(() {
@@ -109,7 +97,7 @@ class UploadedImagesState extends State {
                                 print(gIndex);
                               });
 
-                              Log.e("images", images[index].image_name);
+                              Log.e("images", file[index]);
                               print(index);
                             },
                           );
@@ -120,9 +108,11 @@ class UploadedImagesState extends State {
             height: 20,
           ),
           Container(
+            height: MediaQuery.of(context).size.height/3,
+            width: MediaQuery.of(context).size.width,
             margin:
                 const EdgeInsets.only(left: 0.0, top: 30, right: 0, bottom: 0),
-            child: Image.network('${images[gIndex==null?0:gIndex].image_name}'),
+            child: Image.file(file[gIndex==null?0:gIndex],fit: BoxFit.fill,),
           )
         ])));
   }

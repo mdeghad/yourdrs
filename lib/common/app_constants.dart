@@ -50,6 +50,8 @@ class AppConstants {
   static const yyyy = "yyyy";
   static const hhaa = "hh aa";
 
+  static const apiUrl="";
+
   static String parseDate(int time, String pattern, {DateTime dateTime}) {
     if ((time == null || time < 1) && dateTime == null) {
       return "";

@@ -33,7 +33,6 @@ class Patient_Dectation_State extends State<Patient_Dectation> {
   Directory directory;
   bool isSwitched = false;
   PatientDetailsBloc bloc;
-  List imageArray = [];
   File image;
   int gIndex;
   String fileName;
@@ -94,42 +93,6 @@ class Patient_Dectation_State extends State<Patient_Dectation> {
       print(AppStrings.filePathNotFound + e.toString());
     }
   }
-
-  //saving of filepicker files
-  Future<String> saveFile(String fileName) async {
-    String fileName1;
-  final DateTime now = DateTime.now();
- final DateFormat formatter = DateFormat(AppStrings.dateFormat);
-    final String formatted = formatter.format(now);
-    try {
-      fileName1 = AppStrings.name + basename(fileName).replaceAll(".", "");
-      if (fileName1.length > AppStrings.name.length) {
-        final Directory directory =
-        await getExternalStorageDirectory();
-        String path = '${directory.path}/${AppStrings.folderName}';
-        final myImgDir =
-        await Directory(path).create(recursive: true);
-        final File newImage = await File(filepath).copy(
-            '${myImgDir.path}/${basename(
-                File(filepath).toString() + '${formatted}' + AppStrings.imageFormat)}');
-        setState(() {
-          newImage;
-          Log.e("", newImage);
-          print(path);
-        });
-      }
-    }
-    catch (e, s) {
-      fileName1 = "";
-     // AppLogHelper.printLogs(e, s);
-    }
-
-    print("imsdjfd"+"${DateTime
-        .now()
-        .microsecond}" + fileName1 + ".jpeg");
-    return "${formatted} "+ fileName1 + AppStrings.imageFormat;
-  }
-
 
   //custom file name
   Future<String> createFileName(String mockName) async {
@@ -437,6 +400,7 @@ class Patient_Dectation_State extends State<Patient_Dectation> {
                                                     fit: BoxFit.contain,
                                                   )
                                                 : Container(),
+
                                             Positioned(
                                               right: -10,
                                               top: -5,
@@ -446,7 +410,7 @@ class Patient_Dectation_State extends State<Patient_Dectation> {
                                                 {
                                                   setState(() {
                                                     // paths.values.toList().removeAt(index);
-                                                    var filename = basename(paths.values.toList()[index]);
+                                                    var filename= basename(paths.values.toList()[index]);
                                                     print('remove filename $fileName');
                                                     paths.remove(filename);
                                                   });
@@ -461,7 +425,9 @@ class Patient_Dectation_State extends State<Patient_Dectation> {
                                               new Divider(),
                                     ),
                                   )
-                                : new Container(),
+                                : new Container(
+
+                        ),
                       ),
                       SizedBox(
                         height: 10,
